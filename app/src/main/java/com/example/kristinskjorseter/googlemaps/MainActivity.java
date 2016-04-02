@@ -3,17 +3,21 @@ package com.example.kristinskjorseter.googlemaps;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,17 +32,25 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback,  GoogleMap.OnMapClickListener {
+public class MainActivity extends FragmentActivity implements OnMapReadyCallback,  GoogleMap.OnMapClickListener {
 
     private GoogleMap mMap;
     final String TAG = "PathGoogleMapActivity";
     private LocationManager locationManager;
+
+    private String fileNameInternal = "positions.txt";
 
     private static final LatLng BODOE = new LatLng(67.280357, 14.404916);
     private static final LatLng KEISERVARDEN = new LatLng(67.3148173, 14.4785015);
@@ -185,7 +197,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 + SALTSTRAUMEN.longitude;
 
         String sensor = "sensor=false";
-        String params = waypoints + "&" + sensor;
+        String origin = "origin= + BODOE.latitude + “,” + BODOE.longitude;";
+        String destination = "destination=" + SALTSTRAUMEN.latitude + "," + SALTSTRAUMEN.longitude;
+        String params = origin + "&" + destination + "&" + waypoints + "&" + sensor;
         String output = "json";
         String url = "https://maps.googleapis.com/maps/api/directions/json?origin=17.449797,78.373037&destination=17.47989,78.390095&%20waypoints=optimize:true|17.449797,78.373037||17.47989,78.390095&sensor=false"
                 + output + "?" + params;
@@ -287,4 +301,41 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         alertDialog.show();
     }
 
+    public void doWriteAppFile(View view) {
+        EditText etInput = (EditText) findViewById(R.id.etInput);
+        String content = etInput.getText().toString();
+        FileOutputStream fOut;
+        try {
+            fOut = this.getApplicationContext().openFileOutput(fileNameInternal, Context.MODE_APPEND);
+            OutputStreamWriter osw = new OutputStreamWriter(fOut);
+            osw.write(content);
+            osw.close();
+            fOut.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void doReadAppFile(View view) {
+        Resources res = this.getResources();
+        FileInputStream fIn;
+        try {
+            fIn = this.getApplicationContext().openFileInput(fileNameInternal);
+            InputStreamReader isr = new InputStreamReader(fIn);
+            BufferedReader reader = new BufferedReader(isr);
+            String line = reader.readLine();
+            TextView tvOutput = (TextView)findViewById(R.id.tvOutput); tvOutput.setText(line);
+            isr.close();
+            reader.close();
+            fIn.close();
+
+        } catch (FileNotFoundException e) {
+        e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
+
