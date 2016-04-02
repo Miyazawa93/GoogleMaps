@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/map_type"
+        android:title="@string/map_type"
+        app:showAsAction="ifRoom">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item android:id="@+id/normal"
+                    android:title="@string/normal"
+                    android:checked="true"/>
+
+                <item android:id="@+id/satellite"
+                    android:title="@string/satellite"
+                    android:checked="false"/>
+
+                <item android:id="@+id/terrain"
+                    android:title="@string/terrain"
+                    android:checked="false"/>
+
+                <item android:id="@+id/hybrid"
+                    android:title="@string/hybrid"
+                    android:checked="false"/>
+
+
+            </group>
+        </menu>
+    </item>
+
+    <item android:id="@+id/delete"
+        android:title="@string/delete"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/quit"
+        android:title="@string/quit"
+        app:showAsAction="never"/>
+</menu>

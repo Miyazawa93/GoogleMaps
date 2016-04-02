@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">GoogleMaps</string>
+        <string name="map_type">Map type</string>
+        <string name="normal">Normal</string>
+        <string name="delete">Delete all saved points</string>
+        <string name="quit">Quit</string>
+        <string name="satellite">Satellite</string>
+        <string name="hybrid">Hybrid</string>
+        <string name="terrain">Terrain</string>
+</resources>
